@@ -76,34 +76,20 @@ jobs:
     - name: Cleanup
       uses: rokibhasansagar/slimhub_actions@main
 
-    - name: Prepare the environment
+    - name: Prepare the build environment
       run: |
-        sudo apt update
-        sudo apt -y upgrade
-        sudo apt -y install gperf gcc-multilib gcc-10-multilib g++-multilib g++-10-multilib libc6-dev lib32ncurses5-dev \
-          x11proto-core-dev libx11-dev tree lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc bc ccache lib32readline-dev \
-          lib32z1-dev liblz4-tool libncurses5-dev libsdl1.2-dev libwxgtk3.0-gtk3-dev libxml2 lzop pngcrush schedtool \
-          squashfs-tools imagemagick libbz2-dev lzma ncftp qemu-user-static libstdc++-10-dev libncurses5 python
+        sudo apt update && sudo apt upgrade -y
+        DEBIAN_FRONTEND=noninteractive sudo apt install -yq \
+            linux-modules-extra-$(uname -r) \
+            git python3 python-is-python3 tar aria2 \
+            cpio lz4 lzop liblz4-tool squashfs-tools libtinfo6
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Install OpenJDK
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-version: '11'
-
-    - name: Install Python 2
-      if: github.event.inputs.MANIFEST_BRANCH != 'twrp-11' && github.event.inputs.MANIFEST_BRANCH != 'twrp-12.1'
-      run: |
-        sudo apt -y install python2
-        cd /usr/bin
-        sudo ln -sf python2 python
-
-    - name: Switch to Python3
-      if: github.event.inputs.MANIFEST_BRANCH == 'twrp-11' || github.event.inputs.MANIFEST_BRANCH == 'twrp-12.1'
-      run: |
-        sudo rm -rf /usr/bin/python
-        sudo ln -s /usr/bin/python3 /usr/bin/python
-      continue-on-error: true
 
     - name: Check Manifest Branch
       uses: haya14busa/action-cond@v1
