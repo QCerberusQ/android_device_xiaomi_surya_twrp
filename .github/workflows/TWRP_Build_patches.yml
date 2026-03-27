@@ -15,7 +15,7 @@ on:
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
-        default: 'https://github.com/brigudav/android_device_xiaomi_surya_twrp'
+        default: 'https://github.com/QCerberusQ/android_device_xiaomi_surya_twrp'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: true
@@ -48,7 +48,7 @@ on:
       UPLOAD:
         description: 'Upload to Telegram Bot (true or false)'
         required: true
-        default: 'yes'
+        default: 'no'
         type: choice
         options:
         - yes
@@ -66,7 +66,7 @@ jobs:
   build:
     name: Build TWRP by ${{ github.actor }}
     if: github.event.repository.owner.id == github.event.sender.id
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
@@ -89,7 +89,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
-        java-version: '8'
+        java-version: '11'
 
     - name: Install Python 2
       if: github.event.inputs.MANIFEST_BRANCH != 'twrp-11' && github.event.inputs.MANIFEST_BRANCH != 'twrp-12.1'
@@ -168,7 +168,7 @@ jobs:
     - name: Set Swap Space
       uses: pierotofy/set-swap-space@master
       with:
-        swap-size-gb: 12
+        swap-size-gb: 16
 
     - name: Building recovery
       run: |
