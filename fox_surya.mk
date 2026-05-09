@@ -5,7 +5,7 @@
 #
 
 # OrangeFox-specific settings
-OF_MAINTAINER := "QCerberusQ"
+OF_MAINTAINER := QCerberusQ
 
 OF_USE_GREEN_LED := 0
 OF_DONT_PATCH_ENCRYPTED_DEVICE := 1
