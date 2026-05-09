@@ -2,40 +2,39 @@
 # The filesystem that contains the filesystem checker binary (typically /system) cannot
 # specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
 
-# mount point    fstype   device            device2      flags
-/boot             emmc   /dev/block/sde46
-/dtbo             emmc   /dev/block/sde47                flags=backup=1;display="DTBO";flashimg
-/recovery         emmc   /dev/block/sda8                 flags=backup=1;display="Recovery";flashimg
-/firmware         vfat   /dev/block/sde4                 flags=display="Firmware";mounttodecrypt;fsflags=ro
-/modem_image      emmc   /dev/block/sde4                 flags=backup=1;display="Modem";flashimg
-/bluetooth        vfat   /dev/block/sde5                 flags=display="Bluetooth";fsflags="ro,shortname=lower,uid=1002,gid=3002,dmask=227,fmask=337,context=u:object_r:bt_firmware_file:s0 wait"
-/bluetooth        emmc   /dev/block/sde5                 flags=backup=1;display="Bluetooth";flashimg
-/abl              emmc   /dev/block/sde8                 flags=backup=1;display="Firmware-update"
-/aop              emmc   /dev/block/sde1                 flags=backup=1;subpartitionof=/abl
-/cmnlib           emmc   /dev/block/sde11                flags=backup=1;subpartitionof=/abl
-/cmnlib64         emmc   /dev/block/sde12                flags=backup=1;subpartitionof=/abl
-/devcfg           emmc   /dev/block/sde13                flags=backup=1;subpartitionof=/abl
-/qupfw            emmc   /dev/block/sde14                flags=backup=1;subpartitionof=/abl
-/keymaster        emmc   /dev/block/sde10                flags=backup=1;subpartitionof=/abl
-/imagefv          emmc   /dev/block/sde15                flags=backup=1;subpartitionof=/abl
-/hyp              emmc   /dev/block/sde3                 flags=backup=1;subpartitionof=/abl
-/xbl              emmc   /dev/block/sdb1                 flags=backup=1;subpartitionof=/abl
-/xbl_config       emmc   /dev/block/sdb2                 flags=backup=1;subpartitionof=/abl
-/storsec          emmc   /dev/block/sde38                flags=backup=1;subpartitionof=/abl
-/tz               emmc   /dev/block/sde2                 flags=backup=1;subpartitionof=/abl
-/dsp              emmc   /dev/block/sde9                 flags=backup=1;subpartitionof=/abl
-/persist          ext4   /dev/block/sda2                 flags=backup=1;display="Persist"
-/persist_image    emmc   /dev/block/sda2                 flags=backup=0;display="Persist";flashimg
-/cust             ext4   /dev/block/sda7                 flags=backup=1;display="Cust"
-/cust_image       emmc   /dev/block/sda7                 flags=backup=0;display="Cust";flashimg
-/storage          f2fs   /data/media/0                   flags=display="Internal Storage";usermrf;backup=1;fsflags="bind";removable
-/efs1             emmc   /dev/block/sdf2                 flags=backup=1;display="EFS"
-/efs2             emmc   /dev/block/sdf3                 flags=backup=1;subpartitionof=/efs1
-/efsg             emmc   /dev/block/sdf4                 flags=backup=1;subpartitionof=/efs1
-/efsc             emmc   /dev/block/sdf5                 flags=backup=1;subpartitionof=/efs1
-/vbmeta           emmc   /dev/block/sde45                flags=backup=1;display="VBMeta";flashimg
-/vbmeta_system    emmc   /dev/block/sda9                 flags=backup=1;display="VBMeta System";flashimg
-# Removable storage
-/external_sd      vfat   /dev/block/mmcblk0p1 /dev/block/mmcblk0 flags=fsflags=utf8;display="MicroSD";storage;wipeingui;removable
-/usb-otg          vfat   /dev/block/sdg1 /dev/block/sdg          flags=fsflags=utf8;display="USB Storage";storage;wipeingui;removable
+/boot               emmc    /dev/block/bootdevice/by-name/boot                   flags=display="Boot Image";backup=1;flashimg=1
+/cache              ext4    /dev/block/bootdevice/by-name/cache                  flags=display="Cache";wipeingui;backup=0
+/recovery           emmc    /dev/block/bootdevice/by-name/recovery               flags=display="Recovery Image";backup=1;flashimg=1
 
+/metadata           ext4    /dev/block/bootdevice/by-name/metadata               flags=display="Metadata";backup=0;mounttodecrypt;wrappedkey
+/metadata_image     emmc    /dev/block/bootdevice/by-name/metadata               flags=display="Metadata Image";backup=1;flashimg=1
+
+/cust               ext4    /dev/block/bootdevice/by-name/cust                   flags=display="Cust";backup=0
+/cust_image         emmc    /dev/block/bootdevice/by-name/cust                   flags=display="Cust Image";backup=1;flashimg=1
+
+/firmware           vfat    /dev/block/bootdevice/by-name/modem                  flags=display="Firmware";backup=0
+/firmware_image     emmc    /dev/block/bootdevice/by-name/modem                  flags=display="Firmware Image";flashimg=1;backup=1
+
+# AVB Partition
+/dtbo               emmc    /dev/block/bootdevice/by-name/dtbo                   flags=backup=1;display="DTBo Image";backup=1;flashimg=1
+/vbmeta             emmc    /dev/block/bootdevice/by-name/vbmeta                 flags=display="VBMeta Image";backup=1;flashimg=1
+/vbmeta_system      emmc    /dev/block/bootdevice/by-name/vbmeta_system		     flags=display="VBMeta System Image";backup=1;flashimg=1
+
+# Modem Partition
+/modem              emmc    /dev/block/bootdevice/by-name/modem                  flags=backup=1;display="Modem"
+/bluetooth          emmc    /dev/block/bootdevice/by-name/bluetooth              flags=backup=1;subpartitionof=/modem
+/dsp                emmc    /dev/block/bootdevice/by-name/dsp                    flags=backup=1;subpartitionof=/modem
+
+# EFS Partition
+/efs1               emmc    /dev/block/bootdevice/by-name/modemst1               flags=backup=1;display=EFS
+/efs2               emmc    /dev/block/bootdevice/by-name/modemst2               flags=backup=1;subpartitionof=/efs1
+/efsc               emmc    /dev/block/bootdevice/by-name/fsc                    flags=backup=1;subpartitionof=/efs1
+/efsg               emmc    /dev/block/bootdevice/by-name/fsg                    flags=backup=1;subpartitionof=/efs1
+
+# Persistent Firmware & Properties
+/persist            ext4    /dev/block/bootdevice/by-name/persist                flags=display="Persist"
+/persist_image      emmc    /dev/block/bootdevice/by-name/persist                flags=display="Persist Image";backup=1;flashimg=1
+
+# Removable storage
+/usb_otg            auto    /dev/block/sdg1        /dev/block/sdg                flags=fsflags=utf8;display="USB-OTG";storage;wipeingui;removable
+/external_sd        auto     /dev/block/mmcblk0p1  /dev/block/mmcblk0            flags=display="Micro-SD Card";storage;wipeingui;removable
