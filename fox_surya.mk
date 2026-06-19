@@ -20,9 +20,7 @@ OF_PATCH_AVB20 := 1
 
 # try to prevent potential data format errors
 OF_UNBIND_SDCARD_F2FS := 1
-
-# enforce casefolding for Android 11+
-OF_FORCE_CASEFOLDING := 1
+OF_WIPE_METADATA_AFTER_DATAFORMAT := 1
 
 # maximum permissible splash image size (in kilobytes); do *NOT* increase!
 OF_SPLASH_MAX_SIZE := 130
