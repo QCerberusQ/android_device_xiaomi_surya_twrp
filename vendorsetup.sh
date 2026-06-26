@@ -38,7 +38,7 @@ if [ "$1" = "$FDEVICE" -o "$FOX_BUILD_DEVICE" = "$FDEVICE" ]; then
 
 	export FOX_VANILLA_BUILD=1
 	export FOX_ALLOW_EARLY_SETTINGS_LOAD=1
-	export FOX_SETTINGS_ROOT_DIRECTORY=/data/recovery
+	export FOX_SETTINGS_ROOT_DIRECTORY=/persist/recovery
 	export FOX_MISCELLANEOUS_ROOT_DIRECTORY=/sdcard
 else
 	if [ -z "$FOX_BUILD_DEVICE" -a -z "$BASH_SOURCE" ]; then
